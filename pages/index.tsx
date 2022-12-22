@@ -1,19 +1,30 @@
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
 import { Canvas } from "@react-three/fiber";
-import { createRef } from "react";
+import { createRef, useState } from "react";
 import Ornament from "../components/Ornament";
 import Floor from "../components/Floor";
 import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
 import SkyBox from "../components/SkyBox";
 import { Color } from "three";
 import { useRouter } from "next/router";
+import { useKeyboard } from "../hooks/useKeyboard";
 
 export default function Home() {
   const canvasRef = createRef<HTMLCanvasElement>();
   const router = useRouter();
   const { autorotate } = router.query;
-  const rotate = autorotate === "true";
+  const [rotate, setRotate] = useState<boolean>(autorotate === "true");
+
+  useKeyboard([
+    (e) => {
+      if (e.key !== "Enter") {
+        return;
+      }
+      setRotate((old) => !old);
+    },
+  ]);
+
   return (
     <>
       <Head>
@@ -23,7 +34,16 @@ export default function Home() {
         <link rel='icon' href='/favicon.ico' />
       </Head>
 
-      <main className={styles.main}>
+      <main
+        onKeyDown={(e) => {
+          console.log(e);
+          if (e.key !== "Enter") {
+            return;
+          }
+          setRotate((old) => !old);
+        }}
+        className={styles.main}
+      >
         <Canvas className={styles.canvas} ref={canvasRef}>
           <ambientLight intensity={0.5} />
           <pointLight position={[-10, -10, -10]} />
