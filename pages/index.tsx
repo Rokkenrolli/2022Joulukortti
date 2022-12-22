@@ -7,9 +7,13 @@ import Floor from "../components/Floor";
 import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
 import SkyBox from "../components/SkyBox";
 import { Color } from "three";
+import { useRouter } from "next/router";
 
 export default function Home() {
   const canvasRef = createRef<HTMLCanvasElement>();
+  const router = useRouter();
+  const { autorotate } = router.query;
+  const rotate = autorotate === "true";
   return (
     <>
       <Head>
@@ -31,6 +35,12 @@ export default function Home() {
             position={[-2, 1, 0]}
           />
 
+          <Ornament
+            color={new Color("blue")}
+            scale={[2, 2, 2]}
+            position={[5, 5, 2]}
+          />
+
           <SkyBox />
           <Floor
             position={[0, -10, 0]}
@@ -38,7 +48,7 @@ export default function Home() {
             scale={[200, 200, 200]}
           />
           <PerspectiveCamera position={[50, 20, 20]} makeDefault />
-          <OrbitControls maxPolarAngle={Math.PI / 2} />
+          <OrbitControls maxPolarAngle={Math.PI / 2} autoRotate={rotate} />
         </Canvas>
       </main>
     </>
