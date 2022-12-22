@@ -1,11 +1,11 @@
 import Head from "next/head";
-import { Inter } from "@next/font/google";
 import styles from "../styles/Home.module.css";
 import { Canvas } from "@react-three/fiber";
-import Box from "../components/Box.ts";
 import { createRef } from "react";
-
-const inter = Inter({ subsets: ["latin"] });
+import Ornament from "../components/Ornament";
+import Floor from "../components/Floor";
+import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
+import SkyBox from "../components/SkyBox";
 
 export default function Home() {
   const canvasRef = createRef<HTMLCanvasElement>();
@@ -21,10 +21,17 @@ export default function Home() {
       <main className={styles.main}>
         <Canvas className={styles.canvas} ref={canvasRef}>
           <ambientLight intensity={0.5} />
-          <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
           <pointLight position={[-10, -10, -10]} />
-          <Box position={[-1.2, 0, 0]} />
-          <Box position={[1.2, 0, 0]} />
+          <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
+          <Ornament position={[1, 1, 0]} />
+          <SkyBox />
+          <Floor
+            position={[0, -10, 0]}
+            rotation={[Math.PI / 2, 0, 0]}
+            scale={[200, 200, 200]}
+          />
+          <PerspectiveCamera position={[50, 20, 20]} makeDefault />
+          <OrbitControls />
         </Canvas>
       </main>
     </>
