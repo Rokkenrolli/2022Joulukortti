@@ -6,6 +6,7 @@ import Ornament from "../components/Ornament";
 import Floor from "../components/Floor";
 import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
 import SkyBox from "../components/SkyBox";
+import { Color } from "three";
 
 export default function Home() {
   const canvasRef = createRef<HTMLCanvasElement>();
@@ -23,7 +24,13 @@ export default function Home() {
           <ambientLight intensity={0.5} />
           <pointLight position={[-10, -10, -10]} />
           <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
-          <Ornament position={[1, 1, 0]} />
+          <Ornament color={new Color("hotpink")} position={[1, 1, 0]} />
+          <Ornament
+            color={new Color("red")}
+            scale={[1, 1, 1]}
+            position={[-2, 1, 0]}
+          />
+
           <SkyBox />
           <Floor
             position={[0, -10, 0]}
@@ -31,7 +38,7 @@ export default function Home() {
             scale={[200, 200, 200]}
           />
           <PerspectiveCamera position={[50, 20, 20]} makeDefault />
-          <OrbitControls />
+          <OrbitControls maxPolarAngle={Math.PI / 2} />
         </Canvas>
       </main>
     </>

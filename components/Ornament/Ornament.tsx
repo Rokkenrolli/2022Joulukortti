@@ -1,16 +1,17 @@
 import { ThreeElements, useFrame } from "@react-three/fiber";
 import React, { useRef } from "react";
-import { Mesh } from "three";
-export const Ornament = (props: ThreeElements["mesh"]) => {
+import { Color, Mesh } from "three";
+
+export const Ornament = (props: ThreeElements["mesh"] & { color: Color }) => {
   const ref = useRef<Mesh>(null!);
 
   useFrame((state, delta) => (ref.current.rotation.x += delta));
 
   return (
     <mesh {...props} ref={ref}>
-      <pointLight position={props.position} castShadow />
+      <pointLight position={props.position} color={props.color} castShadow />
       <sphereGeometry args={[1, 128, 128]} />
-      <meshStandardMaterial color={"hotpink"} transparent />
+      <meshStandardMaterial color={props.color} transparent />
     </mesh>
   );
 };
