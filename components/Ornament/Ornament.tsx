@@ -1,22 +1,36 @@
-import { ThreeElements, useFrame } from "@react-three/fiber";
-import React, { useRef } from "react";
-import { Color, Mesh } from "three";
+import { ThreeElements } from "@react-three/fiber";
+import React, { useRef, useState } from "react";
+import { Mesh } from "three";
 
-export const Ornament = (props: ThreeElements["mesh"] & { color: Color }) => {
+export type OrnamentProps = ThreeElements["meshStandardMaterial"] &
+  ThreeElements["mesh"];
+
+interface Props {
+  ornamentProps: OrnamentProps;
+  allowEdit: boolean;
+}
+export const Ornament = ({ ornamentProps, allowEdit }: Props) => {
   const ref = useRef<Mesh>(null!);
-
-  useFrame((state, delta) => (ref.current.rotation.x += delta));
+  const [color, setColor] = useState(ornamentProps.color);
+  const [position, setPosition] = useState(ornamentProps.position);
+  const [editing, setEditing] = useState<boolean>(false);
+  //useFrame((state, delta) => (ref.current.rotation.x += delta));
 
   return (
-    <mesh {...props} ref={ref}>
-      <pointLight position={props.position} color={props.color} castShadow />
+    <mesh
+      onClick={() => {
+        if (!allowEdit) {
+          return;
+        }
+        setEditing((old) => !old);
+      }}
+      {...ornamentProps}
+      position={position}
+      ref={ref}
+    >
+      <pointLight position={position} color={color} castShadow />
       <sphereGeometry args={[1, 32, 32]} />
-      <meshStandardMaterial
-        roughness={0.4}
-        color={props.color}
-        transparent
-        opacity={0.7}
-      />
+      <meshStandardMaterial {...ornamentProps} color={color} />
     </mesh>
   );
 };
